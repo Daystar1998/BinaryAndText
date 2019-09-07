@@ -10,10 +10,12 @@
 	Due Date: 9/8/2019
 ******************************************************************************/
 
+#include <algorithm>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <map>
+#include <vector>
 
 using namespace std;
 
@@ -56,7 +58,7 @@ double readAverageRating(ifstream &fin) {
 		// Read the ratings;
 		fin.read((char *)ratings, numberOfRatings);
 
-		for(int i = 0; i < numberOfRatings; i++){
+		for (int i = 0; i < numberOfRatings; i++) {
 
 			result += ratings[i];
 		}
@@ -111,6 +113,42 @@ void readFile(string &filename, map<short, double> &idsAndRatings) {
 }
 
 /******************************************************************************
+		Name: sortIdsByRatings
+
+		Des:
+			Sorts the ids by the associated ratings
+
+		Params:
+			idsAndRatings - map<short, double> &, the ids and ratings
+
+******************************************************************************/
+vector<pair<short, double>> sortIdsByRatings(map<short, double> &idsAndRatings) {
+
+	vector<pair<short, double>> result;
+
+	for (auto idAndRating : idsAndRatings) {
+
+		result.push_back(idAndRating);
+	}
+
+	// Source: https://www.techiedelight.com/sort-map-values-cpp/
+	// Modified to sort in descending order
+	sort(result.begin(), result.end(),
+		[](const pair<short, double> &left, const pair<short, double> &right) {
+
+			if (left.second != right.second) {
+
+				return left.second > right.second;
+			} else {
+
+				return left.first > right.first;
+			}
+		});
+
+	return result;
+}
+
+/******************************************************************************
 		Name: printOutput
 
 		Des:
@@ -118,11 +156,11 @@ void readFile(string &filename, map<short, double> &idsAndRatings) {
 
 		Params:
 			filename - type string &, the name of the file
-			idsAndRatings - map<short, double> &, map of the ids to the
+			idsAndRatings - vector<pair<short, double>> &, map of the ids to the
 				average ratings
 
 ******************************************************************************/
-void printOutput(string &filename, map<short, double> &idsAndRatings) {
+void printOutput(string &filename, vector<pair<short, double>> &idsAndRatings) {
 
 	ofstream fout(filename, ios::out);
 
@@ -154,9 +192,11 @@ int main() {
 
 	readFile(inputFileName, idsAndRatings);
 
-	// TODO: Sort idsAndRatings by value
+	vector<pair<short, double>> sortedIdsAndRatings;
 
-	printOutput(outputFileName, idsAndRatings);
+	sortedIdsAndRatings = sortIdsByRatings(idsAndRatings);
+
+	printOutput(outputFileName, sortedIdsAndRatings);
 
 	return 0;
 }
