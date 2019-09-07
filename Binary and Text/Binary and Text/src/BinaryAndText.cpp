@@ -141,7 +141,7 @@ vector<pair<short, double>> sortIdsByRatings(map<short, double> &idsAndRatings) 
 				return left.second > right.second;
 			} else {
 
-				return left.first > right.first;
+				return left.first < right.first;
 			}
 		});
 
