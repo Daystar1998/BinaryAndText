@@ -22,4 +22,7 @@
   <ItemGroup>
     <None Include="ratingsFile.dat" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="ratingsReport.txt" />
+  </ItemGroup>
 </Project>

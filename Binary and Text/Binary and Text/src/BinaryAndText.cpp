@@ -11,6 +11,7 @@
 ******************************************************************************/
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <map>
 
@@ -109,13 +110,53 @@ void readFile(string &filename, map<short, double> &idsAndRatings) {
 	fin.close();
 }
 
+/******************************************************************************
+		Name: printOutput
+
+		Des:
+			Prints the data to a text file
+
+		Params:
+			filename - type string &, the name of the file
+			idsAndRatings - map<short, double> &, map of the ids to the
+				average ratings
+
+******************************************************************************/
+void printOutput(string &filename, map<short, double> &idsAndRatings) {
+
+	ofstream fout(filename, ios::out);
+
+	if (fout.is_open()) {
+
+		fout << "PRODUCT RATINGS REPORT" << endl << endl;
+
+		fout << setw(11) << left << "PRODUCT" << setw(11) << right << "RATING" << endl << endl;
+	}
+
+	for (auto idAndRating : idsAndRatings) {
+
+		// Print product id
+		fout << setw(11) << left << idAndRating.first;
+
+		// Print rating
+		fout << setw(11) << right << fixed << setprecision(2) << idAndRating.second << endl;
+	}
+
+	fout.close();
+}
+
 int main() {
 
-	string fileName = "ratingsFile.dat";
+	string inputFileName = "ratingsFile.dat";
+	string outputFileName = "ratingsReport.txt";
 
 	map<short, double> idsAndRatings;
 
-	readFile(fileName, idsAndRatings);
+	readFile(inputFileName, idsAndRatings);
+
+	// TODO: Sort idsAndRatings by value
+
+	printOutput(outputFileName, idsAndRatings);
 
 	return 0;
 }
